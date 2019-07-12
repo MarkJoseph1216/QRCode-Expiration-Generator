@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.qrcodegeneratorexpiration.Generator.GeneratorDate;
+import com.example.qrcodegeneratorexpiration.Generator.GeneratorTime;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -45,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity
         implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -388,7 +391,12 @@ public class MainActivity extends AppCompatActivity
         }
         return false;
     }
-
+    /**  Author: Engr.Arvin Lemuel Cabunoc, CPE
+     *  Date: July 12 2019
+     *  Time: 2:16
+     *  modified im adding generator time
+     *  and generator date to encrypt date
+     * **/
     private void showImageFinished(){
         dialogFinished.setContentView(R.layout.finished_generate);
         imgFinished = (ImageView) dialogFinished.findViewById(R.id.imgFinished);
@@ -396,8 +404,33 @@ public class MainActivity extends AppCompatActivity
         edtCodeEncrypt = (TextInputEditText) dialogFinished.findViewById(R.id.edtCodeEncrypt);
 
         String dateCreated = edtDate.getText().toString();
+        StringTokenizer stringTokenizer = new StringTokenizer(dateCreated, "- :");
+        String year1 = stringTokenizer.nextToken();
+        String month1 = stringTokenizer.nextToken();
+        String day1 = stringTokenizer.nextToken();
+        String hr1 = stringTokenizer.nextToken();
+        String min1 = stringTokenizer.nextToken();
 
-        edtCodeEncrypt.setText(dateCreated);
+        GeneratorDate generatorDate = new GeneratorDate();
+        generatorDate.generatorYearFrom(year1);
+        generatorDate.generatorMonthFrom(month1);
+        generatorDate.generatorDayFrom(day1);
+
+        GeneratorTime generatorTime = new GeneratorTime();
+        generatorTime.generatorHrFrom(hr1);
+        generatorTime.generatorMinFrom(min1);
+
+        Log.d("date and time: ",dateCreated);
+
+        Log.d("year",year1);
+        Log.d("month",month1);
+        Log.d("day",day1);
+        Log.d("hr",hr1);
+        Log.d("min",min1);
+
+        edtCodeEncrypt.setText(generatorDate.yearFrom
+                +153+generatorDate.monthFrom+172+generatorDate.dayFrom
+                +189+generatorTime.hrFrom+102+generatorTime.minFrom);
 
         Bitmap bitmap = null;
         try {
