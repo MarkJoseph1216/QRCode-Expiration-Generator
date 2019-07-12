@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TimePicker;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     String text = "";
     String time;
     Bitmap myBitmap;
-    Dialog showQRImage, showInputPassword;
+    Dialog showQRImage, showInputPassword, dialogFinished;
     Dialog dialogExit;
     View view;
     TextInputEditText edtPassword;
@@ -65,6 +66,10 @@ public class MainActivity extends AppCompatActivity
     int monthFinal, dayFinal,yearFinal, hourFinal, minuteFinal, hour, minute;
     String formatMonth, formatDay, formatHour,formatMinute;
     String dateToday;
+
+    ImageView imgFinished;
+    Button btnOkay;
+    TextInputEditText edtCodeEncrypt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity
         showQRImage = new Dialog(MainActivity.this);
         showInputPassword = new Dialog(MainActivity.this);
         dialogExit = new Dialog(MainActivity.this);
+        dialogFinished = new Dialog(MainActivity.this);
 
         //Checking a Permission for the Storage
         String[] PERMISSIONS = {
@@ -158,6 +164,8 @@ public class MainActivity extends AppCompatActivity
                     saveBitmap(myBitmap, date, dateToday, ".jpg");
                     Snackbar.make(view, "Successfully Saved!", Snackbar.LENGTH_SHORT).show();
                     showQRImage.dismiss();
+
+                    showImageFinished();
                 }
             }
         });
@@ -379,5 +387,38 @@ public class MainActivity extends AppCompatActivity
             showDialogExit();
         }
         return false;
+    }
+
+    private void showImageFinished(){
+        dialogFinished.setContentView(R.layout.finished_generate);
+        imgFinished = (ImageView) dialogFinished.findViewById(R.id.imgFinished);
+        btnOkay = (Button) dialogFinished.findViewById(R.id.btnOkay);
+        edtCodeEncrypt = (TextInputEditText) dialogFinished.findViewById(R.id.edtCodeEncrypt);
+
+        String dateCreated = edtDate.getText().toString();
+
+        edtCodeEncrypt.setText(dateCreated);
+
+        Bitmap bitmap = null;
+        try {
+            bitmap = CreateImage(text);
+            myBitmap = bitmap;
+        } catch (WriterException we) {
+            we.printStackTrace();
+        }
+        if (bitmap != null) {
+            imgFinished.setImageBitmap(bitmap);
+        }
+
+        btnOkay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogFinished.dismiss();
+            }
+        });
+
+        dialogFinished.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogFinished.setCanceledOnTouchOutside(false);
+        dialogFinished.show();
     }
 }
