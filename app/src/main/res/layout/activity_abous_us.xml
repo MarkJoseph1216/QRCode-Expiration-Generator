@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/skyBlue"
+    tools:context=".Activity.AbousUsActivity">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:background="@drawable/qrgeneratorlogo"
+        android:layout_marginTop="40dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_width="150dp"
+        android:layout_height="130dp" />
+
+    <TextView
+        android:textSize="18sp"
+        android:fontFamily="@font/mregular"
+        android:textStyle="bold"
+        android:text="QR-Code Expiration Generator"
+        android:layout_marginTop="15dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:textSize="16sp"
+            android:text="Version: 1.0"
+            android:textStyle="bold"
+            android:fontFamily="@font/mregular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:text="Created by: Mark Joseph"
+            android:textStyle="bold"
+            android:fontFamily="@font/mregular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:text="Date Created: July 08, 2019"
+            android:textStyle="bold"
+            android:fontFamily="@font/mregular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>
