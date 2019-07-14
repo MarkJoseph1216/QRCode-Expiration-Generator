@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     Button btnSave, btnConfirm, btnCancel, btnExitMain;
     TextInputEditText edtDate;
     int size = 660;
-    String txtResult = "";
+    long textEncrypt;
     String text = "";
     String time;
     Bitmap myBitmap;
@@ -161,16 +161,37 @@ public class MainActivity extends AppCompatActivity
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String date = edtDate.getText().toString();
 
-                if (date.isEmpty()) {
+                String dateCreated = edtDate.getText().toString();
+
+                if (dateCreated.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please Select a Validation Date first!", Toast.LENGTH_SHORT).show();
                 } else {
+
+                    //textEncrypt = "";
+                    StringTokenizer stringTokenizer = new StringTokenizer(dateCreated, "- :");
+                    String year1 = stringTokenizer.nextToken();
+                    String month1 = stringTokenizer.nextToken();
+                    String day1 = stringTokenizer.nextToken();
+                    String hr1 = stringTokenizer.nextToken();
+                    String min1 = stringTokenizer.nextToken();
+
+                    GeneratorDate generatorDate = new GeneratorDate();
+                    generatorDate.generatorYearFrom(year1);
+                    generatorDate.generatorMonthFrom(month1);
+                    generatorDate.generatorDayFrom(day1);
+
+                    GeneratorTime generatorTime = new GeneratorTime();
+                    generatorTime.generatorHrFrom(hr1);
+                    generatorTime.generatorMinFrom(min1);
+
+                    String test =  Long.toString(textEncrypt) + generatorDate.yearFrom +153+generatorDate.monthFrom+172+generatorDate.dayFrom
+                            +189+generatorTime.hrFrom+102+generatorTime.minFrom;
 
                     Bitmap yourLogo = BitmapFactory.decodeResource(getResources(), R.drawable.qrgeneratorlogo);
                     Bitmap merge = mergeBitmaps(yourLogo, myBitmap);
 
-                    saveBitmap(merge, date, dateToday, ".jpg");
+                    saveBitmap(merge, test, dateToday, ".jpg");
                     Snackbar.make(view, "Successfully Saved!", Snackbar.LENGTH_SHORT).show();
                     showQRImage.dismiss();
 
@@ -286,9 +307,30 @@ public class MainActivity extends AppCompatActivity
         text = yearFinal + "-" + formatMonth + "-" + formatDay + " " + formatHour + ":" + formatMinute;
         edtDate.setText(yearFinal + "-" + formatMonth + "-" + formatDay + " " + formatHour + ":" + formatMinute);
 
+        String dateExpiration = edtDate.getText().toString();
+
+        StringTokenizer stringTokenizer = new StringTokenizer(dateExpiration, "- :");
+        String year1 = stringTokenizer.nextToken();
+        String month1 = stringTokenizer.nextToken();
+        String day1 = stringTokenizer.nextToken();
+        String hr1 = stringTokenizer.nextToken();
+        String min1 = stringTokenizer.nextToken();
+
+        GeneratorDate generatorDate = new GeneratorDate();
+        generatorDate.generatorYearFrom(year1);
+        generatorDate.generatorMonthFrom(month1);
+        generatorDate.generatorDayFrom(day1);
+
+        GeneratorTime generatorTime = new GeneratorTime();
+        generatorTime.generatorHrFrom(hr1);
+        generatorTime.generatorMinFrom(min1);
+
+        String test =  Long.toString(textEncrypt) + generatorDate.yearFrom +153+generatorDate.monthFrom+172+generatorDate.dayFrom
+                +189+generatorTime.hrFrom+102+generatorTime.minFrom;
+
         Bitmap bitmap = null;
         try {
-            bitmap = CreateImage(text);
+            bitmap = CreateImage(test);
             myBitmap = bitmap;
         } catch (WriterException we) {
             we.printStackTrace();
