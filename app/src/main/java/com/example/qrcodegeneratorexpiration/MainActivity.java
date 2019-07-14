@@ -484,9 +484,12 @@ public class MainActivity extends AppCompatActivity
                 +153+generatorDate.monthFrom+172+generatorDate.dayFrom
                 +189+generatorTime.hrFrom+102+generatorTime.minFrom);
 
+        String test =  Long.toString(textEncrypt) + generatorDate.yearFrom +153+generatorDate.monthFrom+172+generatorDate.dayFrom
+                +189+generatorTime.hrFrom+102+generatorTime.minFrom;
+
         Bitmap bitmap = null;
         try {
-            bitmap = CreateImage(text);
+            bitmap = CreateImage(test);
             myBitmap = bitmap;
         } catch (WriterException we) {
             we.printStackTrace();
