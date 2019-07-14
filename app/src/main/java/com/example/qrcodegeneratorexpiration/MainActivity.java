@@ -6,7 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     String formatMonth, formatDay, formatHour,formatMinute;
     String dateToday;
 
-    ImageView imgFinished;
+    ImageView imgFinished, imgMerged;
     Button btnOkay;
     TextInputEditText edtCodeEncrypt;
 
@@ -164,7 +167,10 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, "Please Select a Validation Date first!", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    saveBitmap(myBitmap, date, dateToday, ".jpg");
+                    Bitmap yourLogo = BitmapFactory.decodeResource(getResources(), R.drawable.qrgeneratorlogo);
+                    Bitmap merge = mergeBitmaps(yourLogo, myBitmap);
+
+                    saveBitmap(merge, date, dateToday, ".jpg");
                     Snackbar.make(view, "Successfully Saved!", Snackbar.LENGTH_SHORT).show();
                     showQRImage.dismiss();
 
@@ -288,7 +294,10 @@ public class MainActivity extends AppCompatActivity
             we.printStackTrace();
         }
         if (bitmap != null) {
-            imgGenerateQR.setImageBitmap(bitmap);
+
+            Bitmap yourLogo = BitmapFactory.decodeResource(getResources(), R.drawable.qrgeneratorlogo);
+            Bitmap merge = mergeBitmaps(yourLogo, bitmap);
+            imgGenerateQR.setImageBitmap(merge);
         }
     }
 
@@ -346,8 +355,8 @@ public class MainActivity extends AppCompatActivity
             fileLocation = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/AndroidBarcodeGenerator/" + message + bitName;
             folderLocation = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Camera/AndroidBarcodeGenerator/";
         }else{
-            fileLocation = Environment.getExternalStorageDirectory().getPath()+"/DCIM/AndroidBarcodeGenerator/" + message + bitName;
-            folderLocation = Environment.getExternalStorageDirectory().getPath()+"/DCIM/AndroidBarcodeGenerator/";
+            fileLocation = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Facebook/" + message + bitName;
+            folderLocation = Environment.getExternalStorageDirectory().getPath()+"/DCIM/Facebook/";
         }
 
         Log.d("file_location", fileLocation);
@@ -402,6 +411,7 @@ public class MainActivity extends AppCompatActivity
         imgFinished = (ImageView) dialogFinished.findViewById(R.id.imgFinished);
         btnOkay = (Button) dialogFinished.findViewById(R.id.btnOkay);
         edtCodeEncrypt = (TextInputEditText) dialogFinished.findViewById(R.id.edtCodeEncrypt);
+        imgMerged = (ImageView) dialogFinished.findViewById(R.id.imgMerged);
 
         String dateCreated = edtDate.getText().toString();
         StringTokenizer stringTokenizer = new StringTokenizer(dateCreated, "- :");
@@ -440,7 +450,9 @@ public class MainActivity extends AppCompatActivity
             we.printStackTrace();
         }
         if (bitmap != null) {
-            imgFinished.setImageBitmap(bitmap);
+            Bitmap yourLogo = BitmapFactory.decodeResource(getResources(), R.drawable.qrgeneratorlogo);
+            Bitmap merge = mergeBitmaps(yourLogo, bitmap);
+            imgFinished.setImageBitmap(merge);
         }
 
         btnOkay.setOnClickListener(new View.OnClickListener() {
@@ -453,5 +465,20 @@ public class MainActivity extends AppCompatActivity
         dialogFinished.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogFinished.setCanceledOnTouchOutside(false);
         dialogFinished.show();
+    }
+
+    public Bitmap mergeBitmaps(Bitmap logo, Bitmap qrcode) {
+
+        Bitmap combined = Bitmap.createBitmap(qrcode.getWidth(), qrcode.getHeight(), qrcode.getConfig());
+        Canvas canvas = new Canvas(combined);
+        int canvasWidth = canvas.getWidth();
+        int canvasHeight = canvas.getHeight();
+        canvas.drawBitmap(qrcode, new Matrix(), null);
+
+        Bitmap resizeLogo = Bitmap.createScaledBitmap(logo, canvasWidth / 7, canvasHeight / 8, true);
+        int centreX = (canvasWidth - resizeLogo.getWidth()) /2;
+        int centreY = (canvasHeight - resizeLogo.getHeight()) / 2;
+        canvas.drawBitmap(resizeLogo, centreX, centreY, null);
+        return combined;
     }
 }
